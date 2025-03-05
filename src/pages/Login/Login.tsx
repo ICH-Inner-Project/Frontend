@@ -1,4 +1,4 @@
-import styles from "./styles.module.css";
+import styles from "./Login.module.css";
 import { ApolloError } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { login, setLoading } from "@redux/slices/authSlices";
@@ -6,10 +6,13 @@ import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { authService } from "@services/authService";
+import Button from "@components/Button/Button";
+import Text from "@components/Text/Text";
+import { usernameValidate, passwordValidate } from "@utils/validations";
 
 function LogIn() {
   const dispatch = useAppDispatch();
-  const naavigate = useNavigate();
+  const navigate = useNavigate();
   const loading = useAppSelector((state) => state.auth.loading);
   const [loginError, setLoginError] = useState<string | null>(null);
 
@@ -35,29 +38,29 @@ function LogIn() {
       if (data?.login) {
         dispatch(login({ user: data.login.user, token: data.login.token }));
       }
-      naavigate("/home");
+      navigate("/home");
     } catch (err) {
       console.error("Login error:", err);
 
       if (err instanceof ApolloError) {
         if (err.networkError) {
-          setLoginError("Ошибка сети. Пожалуйста, попробуйте позже.");
+          setLoginError("Network error. Please try again later.");
         } else if (err.graphQLErrors.length > 0) {
           const errorMessages = err.graphQLErrors.map((e) => e.message);
           if (errorMessages.includes("Login error: User not found")) {
             setLoginError(
-              "Пользователь не найден. Проверьте логин и попробуйте снова."
+              "User not found. Please check your username and try again."
             );
           } else if (errorMessages.includes("Login error: Invalid password")) {
-            setLoginError("Неверный логин или пароль.");
+            setLoginError("Incorrect username or password");
           } else {
             setLoginError(errorMessages.join(" "));
           }
         } else {
-          setLoginError("Неверный логин или пароль.");
+          setLoginError("Incorrect username or password.");
         }
       } else {
-        setLoginError("Произошла неизвестная ошибка. Попробуйте позже.");
+        setLoginError("An unknown error occurred. Please try again later.");
       }
     } finally {
       dispatch(setLoading(false));
@@ -66,28 +69,63 @@ function LogIn() {
 
   return (
     <div className={styles.container}>
-      <form onSubmit={handleSubmit(handlelogin)}>
+      <form
+        onSubmit={handleSubmit(handlelogin)}
+        className={styles.formContainer}
+      >
         <input
           type="text"
-          placeholder="username"
-          {...register("username", { required: "It's required" })}
+          placeholder="Username"
+          {...register("username", {
+            validate: usernameValidate,
+          })}
+          className={styles.input}
+          onChange={() => {
+            setLoginError(null);
+          }}
         />
         {errors.username && (
-          <p className={styles.error}>{errors.username.message}</p>
+          <Text
+            content={errors.username.message || ""}
+            inlineStyles={{ color: "red", fontSize: "14px" }}
+          />
         )}
         <input
           type="password"
           placeholder="Password"
-          {...register("password", { required: "It's required" })}
+          {...register("password", {
+            validate: passwordValidate,
+          })}
+          className={styles.input}
+          onChange={() => {
+            setLoginError(null);
+          }}
         />
         {errors.password && (
-          <p className={styles.error}>{errors.password.message}</p>
+          <Text
+            content={errors.password.message || ""}
+            inlineStyles={{ color: "red", fontSize: "14px" }}
+          />
         )}
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Log in"}
-        </button>
+        <Button
+          text={loading ? "LOGGIN IN" : "LOGIN"}
+          onClick={() => {}}
+          inlineStyles={{
+            width: "100%",
+            maxWidth: "400px",
+            height: "50px",
+            borderRadius: "5px",
+            fontSize: "16px",
+            color: "#4F4F4F",
+          }}
+        />
       </form>
-      {loginError && <p className={styles.error}>{loginError}</p>}
+      {loginError && (
+        <Text
+          content={loginError}
+          inlineStyles={{ color: "red", fontSize: "14px" }}
+        />
+      )}
     </div>
   );
 }
