@@ -42,26 +42,32 @@ function LogIn() {
     } catch (err) {
       console.error("Login error:", err);
 
-      if (err instanceof ApolloError) {
-        if (err.networkError) {
-          setLoginError("Network error. Please try again later.");
-        } else if (err.graphQLErrors.length > 0) {
-          const errorMessages = err.graphQLErrors.map((e) => e.message);
-          if (errorMessages.includes("Login error: User not found")) {
-            setLoginError(
-              "User not found. Please check your username and try again."
-            );
-          } else if (errorMessages.includes("Login error: Invalid password")) {
-            setLoginError("Incorrect username or password");
-          } else {
-            setLoginError(errorMessages.join(" "));
-          }
-        } else {
-          setLoginError("Incorrect username or password.");
-        }
-      } else {
+      if (!(err instanceof ApolloError)) {
         setLoginError("An unknown error occurred. Please try again later.");
+        return;
       }
+
+      if (err.networkError) {
+        setLoginError("Network error. Please try again later.");
+        return;
+      }
+      if (err.graphQLErrors.length === 0) {
+        setLoginError("Incorrect username or password.");
+        return;
+      }
+
+      const errorMessages = err.graphQLErrors.map((e) => e.message);
+      if (errorMessages.includes("Login error: User not found")) {
+        setLoginError(
+          "User not found. Please check your username and try again."
+        );
+        return;
+      }
+      if (errorMessages.includes("Login error: Invalid password")) {
+        setLoginError("Incorrect username or password");
+        return;
+      }
+      setLoginError(errorMessages.join(" "));
     } finally {
       dispatch(setLoading(false));
     }
