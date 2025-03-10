@@ -1,40 +1,79 @@
+import { useState } from "react";
 import styles from "./Table.module.css";
+import EditUser from "@pages/EditUser/EditUser";
+import { usersService } from "@services/usersService";
+import { useAppDispatch } from "@hooks/reduxHooks";
+import { setUsers } from "@redux/slices/usersSlice";
 
-interface User {
-    id: number;
-    username: string;
-    dateCreated: string;
+interface UserInTable {
+  id: string;
+  username: string;
+  dateCreated: string;
 }
 
 interface TableProps {
-    users: User[];
+  users: UserInTable[];
+  ondeleteUser: (id: string) => void;
 }
 
-export default function Table({ users }: TableProps) {
-    return (
-        <>
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th>№</th>
-                        <th>Username</th>
-                        <th>Date Created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map((user) => (
-                        <tr key={user.id}>
-                            <td>{user.id}</td>
-                            <td>{user.username}</td>
-                            <td>{user.dateCreated}</td>
-                            <td>
-                                <button>Edit</button>
-                                <button>×</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </>
-    );
+interface FullInfoUser {
+  id: string;
+  username: string;
+  phone: string;
+  birthday: string;
+  gender: string;
+  firstName: string;
+  lastName: string;
+  role?: string;
+}
+
+export default function Table({ users, ondeleteUser }: TableProps) {
+  const dispatch = useAppDispatch();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<FullInfoUser | null>(null);
+
+  async function openDialog(user: UserInTable) {
+    try {
+      const fullInfoUser = await usersService.getUserById(user.id);
+      setSelectedUser(fullInfoUser);
+      setIsDialogOpen(true);
+    } catch (error) {
+      console.error("Ошибка при получении данных о пользователе:", error);
+    }
+  }
+  async function closeDialog() {
+    setIsDialogOpen(false);
+    setSelectedUser(null);
+    const updatedUsers = await usersService.getUsers();
+    dispatch(setUsers(updatedUsers));
+  }
+  return (
+    <>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Username</th>
+            <th>Date Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user, index) => (
+            <tr key={user.id}>
+              <td>{index + 1}</td>
+              <td>{user.username}</td>
+              <td>{user.dateCreated}</td>
+              <td>
+                <button onClick={() => openDialog(user)}>Edit</button>
+                <button onClick={() => ondeleteUser(user.id)}>×</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {isDialogOpen && selectedUser && (
+        <EditUser onCloseDialog={closeDialog} user={selectedUser} />
+      )}
+    </>
+  );
 }
