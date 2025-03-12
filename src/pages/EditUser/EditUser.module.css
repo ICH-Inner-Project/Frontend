@@ -11,15 +11,21 @@
   z-index: 3;
 }
 
+.container {
+  display: flex;
+  gap: 100px;
+}
+
 .modalContent {
   padding: 50px;
   display: flex;
+  flex-direction: column;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
   max-width: 1000px;
   width: 100%;
-  gap: 100px;
+  gap: 40px;
 }
 
 .formContainer {
@@ -41,10 +47,9 @@
   box-shadow: none;
 }
 
-/* .customFileUpload {
-  display: inline-block;
-  cursor: pointer;
-} */
+input[type="file"]::-webkit-file-upload-button {
+  display: none;
+}
 
 .rightContainer,
 .leftContainer {

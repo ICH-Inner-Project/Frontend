@@ -26,7 +26,7 @@ export interface UserInCreate {
   firstName: string;
   lastName: string;
   role?: string;
-  avatar?: FileList;
+  avatar?: File;
 }
 
 function CreateAccount() {
@@ -44,13 +44,14 @@ function CreateAccount() {
 
   const handleCreateAccount = async (formData: UserInCreate) => {
     try {
-      console.log("Form data received:", formData);
-
-      const avatarFile =
-        formData.avatar && formData.avatar.length > 0
-          ? formData.avatar
-          : undefined;
-      console.log(avatarFile, "avatarFile");
+      const fileList = formData.avatar as FileList | undefined;
+      console.log(fileList, "fileList");
+      const file: File | undefined = fileList?.[0];
+      if (file) {
+        console.log(file, "file");
+      } else {
+        console.log("No file selected");
+      }
 
       const response = await usersService.createUser(
         formData.username,
@@ -61,7 +62,7 @@ function CreateAccount() {
         formData.firstName,
         formData.lastName,
         formData.role,
-        avatarFile
+        file
       );
 
       if (response) {

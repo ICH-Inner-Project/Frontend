@@ -16,6 +16,18 @@
   vertical-align: top;
 }
 
+.table > tbody > tr > td {
+  font-size: 16px;
+  color: #333333;
+}
+
+.table > tbody > tr > td > button {
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  color: #333333;
+}
+
 .table td:last-of-type {
   display: flex;
   justify-content: space-between;

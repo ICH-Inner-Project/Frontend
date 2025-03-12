@@ -120,6 +120,10 @@ export const usersService = {
       query: GET_USERS,
       fetchPolicy: "network-only",
     });
+    console.log(data);
+    if (!data || !data.users) {
+      throw new Error("Failed to fetch users.");
+    }
     return data.users;
   },
   async deleteUser(id: string): Promise<boolean> {
@@ -128,15 +132,14 @@ export const usersService = {
         mutation: DELETE_USER,
         variables: { id },
       });
+
       if (!data || data.deleteUser === undefined) {
-        console.error(
-          "Ошибка: не удалось удалить пользователя. Ответ не получен."
-        );
+        console.error("Error: Failed to delete user. No response received.");
         return false;
       }
       return data.deleteUser;
     } catch (error) {
-      console.error("Ошибка при удалении пользователя:", error);
+      console.error("Error while deleting user:", error);
       return false;
     }
   },
@@ -149,9 +152,10 @@ export const usersService = {
     firstName: string,
     lastName: string,
     role?: string,
-    avatar?: FileList
+    avatar?: File
   ): Promise<UserResponse> {
     try {
+      const avatarFile = avatar || null;
       const { data } = await apolloClient.mutate<{ updateUser: UserResponse }>({
         mutation: UPDATE_USER,
         variables: {
@@ -163,18 +167,16 @@ export const usersService = {
           role: role || "user",
           lastName,
           firstName,
-          avatar,
+          avatar: avatarFile,
         },
       });
 
       if (!data || !data.updateUser) {
-        throw new Error(
-          "Ошибка при обновлении пользователя, данные не получены."
-        );
+        throw new Error("Error updating user, no data received.");
       }
       return data.updateUser;
     } catch (error) {
-      console.error("Ошибка при обновлении пользователя:", error);
+      console.error("Error updating user:", error);
       throw error;
     }
   },
@@ -197,9 +199,10 @@ export const usersService = {
     firstName: string,
     lastName: string,
     role?: string,
-    avatar?: FileList
+    avatar?: File
   ): Promise<UserResponse> {
     try {
+      const avatarFile = avatar || null;
       const { data } = await apolloClient.mutate<{ createUser: UserResponse }>({
         mutation: CREATE_USER,
         variables: {
@@ -211,18 +214,15 @@ export const usersService = {
           role: role || "user",
           lastName,
           firstName,
-          avatar,
+          avatar: avatarFile,
         },
       });
-
       if (!data || !data.createUser) {
-        throw new Error(
-          "Ошибка при создании пользователя, данные не получены."
-        );
+        throw new Error("Error creating user, no data received.");
       }
       return data.createUser;
     } catch (error) {
-      console.error("Ошибка при создании пользователя:", error);
+      console.error("Error creating user:", error);
       throw error;
     }
   },

@@ -38,7 +38,7 @@ export default function Table({ users, ondeleteUser }: TableProps) {
       setSelectedUser(fullInfoUser);
       setIsDialogOpen(true);
     } catch (error) {
-      console.error("Ошибка при получении данных о пользователе:", error);
+      console.error("Error retrieving user data:", error);
     }
   }
   async function closeDialog() {
@@ -65,7 +65,9 @@ export default function Table({ users, ondeleteUser }: TableProps) {
               <td>{user.dateCreated}</td>
               <td>
                 <button onClick={() => openDialog(user)}>Edit</button>
-                <button onClick={() => ondeleteUser(user.id)}>×</button>
+                <button onClick={() => ondeleteUser(user.id)}>
+                  <span className="material-symbols-outlined">delete</span>
+                </button>
               </td>
             </tr>
           ))}

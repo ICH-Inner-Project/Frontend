@@ -15,7 +15,7 @@ function ListOfAccount() {
         const fetchedUsers = await usersService.getUsers();
         dispatch(setUsers(fetchedUsers));
       } catch (error) {
-        console.error("Ошибка загрузки пользователей:", error);
+        console.error("Error loading users:", error);
       } finally {
         dispatch(setLoading(false));
       }

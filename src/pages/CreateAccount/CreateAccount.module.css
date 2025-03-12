@@ -23,10 +23,9 @@
   box-shadow: none;
 }
 
-/*.customFileUpload {
-  display: inline-block;
-  cursor: pointer;
-} */
+input[type="file"]::-webkit-file-upload-button {
+  display: none;
+}
 
 .rightContainer,
 .leftContainer {

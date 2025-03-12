@@ -101,6 +101,7 @@ export const phoneValidate = (value: string) => {
     return "This value should not be blank";
   }
 
-  if (!/^\+?\d{10,12}$/.test(value)) return "This value is not valid";
-  return true;
+  if (!/^\+\d{10,12}$/.test(value)) {
+    return "Phone number must start with '+' and contain 10-12 digits";
+  }
 };
