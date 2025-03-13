@@ -14,11 +14,7 @@ const logInMutation = gql`
         firstName
         lastName
         role
-        posts {
-          id
-          title
-          content
-        }
+        posts
         createdAt
         updatedAt
       }

@@ -1,11 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-}
-
 interface User {
   id: string;
   username: string;
@@ -15,7 +9,7 @@ interface User {
   firstName: string;
   lastName: string;
   role: string;
-  posts: Post[];
+  posts: string[];
   createdAt: string;
   updatedAt: string;
 }
