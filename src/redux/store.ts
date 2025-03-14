@@ -2,12 +2,14 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlices";
 import tabReducer from "./slices/tableSlice";
 import usersReducer from "./slices/usersSlice";
+import postsReducer from "./slices/postsSlice";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     tab: tabReducer,
     users: usersReducer,
+    posts: postsReducer,
   },
 });
 
