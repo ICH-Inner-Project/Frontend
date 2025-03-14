@@ -114,6 +114,25 @@ const CREATE_USER = gql`
   }
 `;
 
+export const GET_USER = gql`
+  query getUser {
+    me {
+      id
+      username
+      phone
+      birthday
+      gender
+      firstName
+      lastName
+      role
+      avatar
+      posts
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const usersService = {
   async getUsers(): Promise<UserResponse[]> {
     const { data } = await apolloClient.query<UsersQueryResponse>({
@@ -225,5 +244,15 @@ export const usersService = {
       console.error("Error creating user:", error);
       throw error;
     }
+  },
+  async getUser(): Promise<UserResponse> {
+    const { data } = await apolloClient.query<{ me: UserResponse }>({
+      query: GET_USER,
+    });
+    console.log(data);
+    if (!data || !data.me) {
+      throw new Error("Failed to fetch user.");
+    }
+    return data.me;
   },
 };

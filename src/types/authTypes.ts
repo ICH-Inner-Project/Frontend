@@ -9,7 +9,7 @@ export interface LoginResponse {
       firstName: string;
       lastName: string;
       role: string;
-      posts: { id: string; title: string; content: string }[];
+      posts: string[];
       createdAt: string;
       updatedAt: string;
     };

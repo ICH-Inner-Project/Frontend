@@ -1,26 +1,38 @@
-.postCard {
+.postCardInitial,
+.postCardPrimary {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   background-color: white;
-  width: 80%;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: stretch;
   padding: 15px;
 }
+.postCardPrimary {
+  height: 100vh;
+  padding: 30px 15px 70px 15px;
+}
+.postCardInitial {
+  margin: 0 auto;
+  max-width: 330px;
+}
 
-.postImage {
-  width: 50%;
-  height: auto;
+.postImageInitial,
+.postImagePrimary {
+  width: 100%;
+  aspect-ratio: 3/ 2;
   object-fit: cover;
   border-radius: 8px 8px 8px 8px;
   display: block;
 }
-
-.postContent {
-  width: 50%;
+.postImagePrimary {
+  border-radius: 25px;
+}
+.postContentInitial,
+.postContentPrimary {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -30,14 +42,40 @@
   box-sizing: border-box;
 }
 
-.postTitle {
+.postContentPrimary {
+  padding: 50px;
+}
+
+.postTitleInitial.postTitlePrimary {
   font-size: 16px;
+  font-weight: 500;
   color: rgba(79, 79, 79, 1);
   margin: 0;
 }
 
-.postText {
+.postTitlePrimary {
+  font-size: 24px;
+}
+
+.postTextInitial,
+.postTextPrimary {
   font-size: 16px;
   color: rgba(79, 79, 79, 1);
   margin-top: 23px;
+}
+
+.postDateAndTimeContainer,
+.settingsContainer {
+  display: flex;
+  justify-content: end;
+  gap: 15px;
+}
+
+.topContainer {
+  display: flex;
+  justify-content: space-between;
+  color: #6d6d6d;
+  font-weight: 300;
+  font-size: 12px;
+  padding-bottom: 15px;
 }
