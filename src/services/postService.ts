@@ -37,6 +37,33 @@ const DELETE_POST = gql`
   }
 `;
 
+const UPDATE_POST = gql`
+  mutation updatePost(
+    $id: ID!
+    $title: String
+    $content: String
+    $description: String
+    $publishedAt: String
+    $image: Upload
+  ) {
+    updatePost(
+      id: $id
+      title: $title
+      content: $content
+      description: $description
+      publishedAt: $publishedAt
+      image: $image
+    ) {
+      id
+      title
+      content
+      description
+      image
+      publishedAt
+    }
+  }
+`;
+
 export const postService = {
   async getUserPosts(userId: string): Promise<PostResponse[]> {
     const { data } = await apolloClient.query<{ userPosts: PostResponse[] }>({
@@ -76,6 +103,37 @@ export const postService = {
     } catch (error) {
       console.error("Error while deleting post:", error);
       return false;
+    }
+  },
+  async updatePost(
+    id: string,
+    title: string,
+    content: string,
+    description: string,
+    publishedAt: string,
+    image?: File
+  ): Promise<PostResponse> {
+    try {
+      const imageFile = image || null;
+      const { data } = await apolloClient.mutate<{ updatePost: PostResponse }>({
+        mutation: UPDATE_POST,
+        variables: {
+          id,
+          title,
+          content,
+          description,
+          publishedAt,
+          image: imageFile,
+        },
+      });
+
+      if (!data || !data.updatePost) {
+        throw new Error("Error updating post, no data received.");
+      }
+      return data.updatePost;
+    } catch (error) {
+      console.error("Error updating post:", error);
+      throw error;
     }
   },
 };

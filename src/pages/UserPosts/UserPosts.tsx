@@ -46,9 +46,7 @@ function UserPosts({ userId }: { userId: string }) {
       {posts.map((post) => (
         <PostCard
           key={post.id}
-          imgUrl={post.image}
-          title={post.title}
-          content={post.content}
+          post={post}
           style={"initial"}
           onClick={() => handlePostClick(post.id)}
         />

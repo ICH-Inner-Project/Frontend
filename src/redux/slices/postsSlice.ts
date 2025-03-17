@@ -14,11 +14,13 @@ interface Post {
 
 interface PostsState {
   posts: Post[];
+  currentPost: Post | null;
   loading: boolean;
 }
 
 const initialState: PostsState = {
   posts: [],
+  currentPost: null,
   loading: false,
 };
 
@@ -35,8 +37,12 @@ const postsSlice = createSlice({
     removePost: (state, action: PayloadAction<string>) => {
       state.posts = state.posts.filter((post) => post.id !== action.payload);
     },
+    setCurrentPost: (state, action: PayloadAction<Post | null>) => {
+      state.currentPost = action.payload;
+    },
   },
 });
 
-export const { setPosts, setLoading, removePost } = postsSlice.actions;
+export const { setPosts, setLoading, removePost, setCurrentPost } =
+  postsSlice.actions;
 export default postsSlice.reducer;
