@@ -13,7 +13,7 @@ import {
 import { postService } from "@services/postService";
 import { setCurrentPost } from "@redux/slices/postsSlice";
 import { useAppDispatch } from "@hooks/reduxHooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface PostInModal {
   id: string;
@@ -45,8 +45,20 @@ function PostModal({ post, onCloseDialog, isNewPost }: PostModalProps) {
   });
   const dispatch = useAppDispatch();
   const descriptionValue = watch("description", post.description);
+  const selectedImage = watch("image");
   const descriptionLength = descriptionValue.length;
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fileList = selectedImage as FileList | undefined;
+    console.log(fileList, "fileList selectedImage");
+    const file: File | undefined = fileList?.[0];
+    if (file) {
+      const imgUrl = URL.createObjectURL(file);
+      console.log(imgUrl, "imgUrl");
+      setPreviewImage(imgUrl);
+    }
+  }, [selectedImage]);
 
   const onSubmit = async (formData: PostInModal) => {
     try {
@@ -66,11 +78,6 @@ function PostModal({ post, onCloseDialog, isNewPost }: PostModalProps) {
           const blob = await fetch(fetchedPost.image).then((res) => res.blob());
           fileToUpload = new File([blob], "image.jpg", { type: blob.type });
         }
-      }
-      if (fileToUpload) {
-        const imgUrl = URL.createObjectURL(fileToUpload);
-        console.log(imgUrl, "imgUrl");
-        setPreviewImage(imgUrl);
       }
 
       const response = await postService.updatePost(
