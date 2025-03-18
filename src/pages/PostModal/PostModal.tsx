@@ -14,6 +14,7 @@ import { postService } from "@services/postService";
 import { setCurrentPost } from "@redux/slices/postsSlice";
 import { useAppDispatch } from "@hooks/reduxHooks";
 import { useEffect, useState } from "react";
+import { ApolloError } from "@apollo/client";
 
 interface PostInModal {
   id: string;
@@ -48,6 +49,7 @@ function PostModal({ post, onCloseDialog, isNewPost }: PostModalProps) {
   const selectedImage = watch("image");
   const descriptionLength = descriptionValue.length;
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   useEffect(() => {
     const fileList = selectedImage as FileList | undefined;
@@ -62,6 +64,7 @@ function PostModal({ post, onCloseDialog, isNewPost }: PostModalProps) {
 
   const onSubmit = async (formData: PostInModal) => {
     try {
+      setServerError(null);
       const truncatedTitle = truncateText(formData.title, 40);
       const truncatedDescription = truncateText(formData.description, 100);
       const truncatedContent = truncateText(formData.content, 1000);
@@ -99,8 +102,37 @@ function PostModal({ post, onCloseDialog, isNewPost }: PostModalProps) {
       }
       onCloseDialog();
       reset();
-    } catch (error) {
-      console.error("Mutation error:", error);
+    } catch (err) {
+      console.error("Mutation error:", err);
+
+      if (err instanceof ApolloError) {
+        if (err.networkError) {
+          setServerError("Network error. Please check your connection.");
+          return;
+        }
+
+        if (err.graphQLErrors.length > 0) {
+          const errorMessages = err.graphQLErrors.map((e) => e.message);
+          if (
+            errorMessages.some((msg) =>
+              msg.includes(
+                "Invalid file type. Only JPG, PNG, and GIF are allowed"
+              )
+            )
+          ) {
+            setServerError(
+              "Invalid file type. Only JPG, PNG, and GIF are allowed"
+            );
+            return;
+          }
+        }
+      }
+
+      if (err instanceof Error) {
+        setServerError(err.message);
+      } else {
+        setServerError("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
@@ -264,6 +296,16 @@ function PostModal({ post, onCloseDialog, isNewPost }: PostModalProps) {
                 />
               )}
             </div>
+            {serverError && (
+              <Text
+                content={serverError}
+                inlineStyles={{
+                  color: "red",
+                  fontSize: "14px",
+                  textAlign: "center",
+                }}
+              />
+            )}
           </form>
         )}
       </div>
