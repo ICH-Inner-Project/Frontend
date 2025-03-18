@@ -80,3 +80,8 @@
   font-size: 12px;
   padding-bottom: 15px;
 }
+
+.settingsContainer {
+  display: flex;
+  gap: 10px;
+}

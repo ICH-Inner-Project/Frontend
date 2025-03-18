@@ -105,3 +105,73 @@ export const phoneValidate = (value: string) => {
     return "Phone number must start with '+' and contain 10-12 digits";
   }
 };
+
+export const titleValidate = (value: string) => {
+  if (!value) {
+    return "This value should not be blank";
+  }
+
+  if (value.length > 40) {
+    return "40 symbols max";
+  }
+
+  return true;
+};
+
+export const descriptionValidate = (value: string) => {
+  if (!value) {
+    return "This value should not be blank";
+  }
+
+  if (value.length > 100) {
+    return "100 symbols max";
+  }
+
+  return true;
+};
+
+export const contentPostValidate = (value: string) => {
+  if (!value) {
+    return "This value should not be blank";
+  }
+
+  if (value.length > 1000) {
+    return "1000 symbols max";
+  }
+
+  return true;
+};
+
+export const postValidate = (
+  title: string,
+  description: string,
+  content: string,
+  newImage: File | null
+) => {
+  if (!title && !description && !content && !newImage) {
+    return "Impossible to create empty post";
+  }
+
+  return true;
+};
+
+export const truncateText = (text: string, maxLength: number) =>
+  text.length > maxLength ? text.slice(0, maxLength) : text;
+
+export const dateTimeValidate = (value: string | undefined) => {
+  if (!value) {
+    return "This value should not be blank";
+  }
+  const selectedDate = new Date(value);
+  const now = new Date();
+
+  if (isNaN(selectedDate.getTime())) {
+    return "Invalid date format";
+  }
+
+  if (selectedDate < now) {
+    return "Date and time cannot be in the past";
+  }
+
+  return true;
+};

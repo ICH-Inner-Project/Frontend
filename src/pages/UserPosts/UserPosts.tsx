@@ -15,6 +15,7 @@ function UserPosts({ userId }: { userId: string }) {
     async function fetchUserPosts() {
       try {
         const userPosts = await postService.getUserPosts(userId);
+        console.log(userPosts, "userPosts");
         dispatch(setPosts(userPosts));
       } catch (error) {
         console.error("Error loading user posts:", error);
@@ -46,9 +47,7 @@ function UserPosts({ userId }: { userId: string }) {
       {posts.map((post) => (
         <PostCard
           key={post.id}
-          imgUrl={post.image}
-          title={post.title}
-          content={post.content}
+          post={post}
           style={"initial"}
           onClick={() => handlePostClick(post.id)}
         />
