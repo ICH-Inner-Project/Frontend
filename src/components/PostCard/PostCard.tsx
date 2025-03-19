@@ -1,9 +1,14 @@
+import React from "react";
+import styles from "./Styles.module.css";
+
 interface PostCardProps {
   date: string;
   time: string;
   imgUrl: string;
   title: string;
   content: string;
+  createdAt: string; // Дата создания поста
+  readTime: string; // Время чтения
 }
 
 export default function PostCard({
@@ -12,11 +17,13 @@ export default function PostCard({
   imgUrl,
   title,
   content,
+  createdAt,
+  readTime,
 }: PostCardProps) {
   return (
     <div className={styles.postCard}>
       <div className={styles.postDateTime}>
-        {date} {time}
+        created: {createdAt} | {readTime} read
       </div>
       <img
         className={styles.postImage}
