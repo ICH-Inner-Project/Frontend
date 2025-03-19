@@ -18,11 +18,10 @@ function Post() {
   const [currentUser, setCurentUser] = useState<UserResponse | null>(null);
 
   useEffect(() => {
-    setLoading(true);
     async function fetchPost() {
       if (!postId) return;
+      setLoading(true);
       try {
-        setLoading(true);
         const fetchedPost = await postService.getPost(postId);
         dispatch(setCurrentPost(fetchedPost));
         const fetchedUser = await usersService.getUser();
@@ -46,20 +45,17 @@ function Post() {
 
   async function handleDeletePost() {
     if (!postId || !curentPost) return;
-    const beforPosts = await postService.getUserPosts(curentPost.authorId);
-    console.log(beforPosts, "beforPosts");
     const succes = await postService.deletePost(postId);
     dispatch(removePost(postId));
     if (succes) {
       const updatedPosts = await postService.getUserPosts(curentPost.authorId);
-      console.log(updatedPosts, "updatedPosts");
       dispatch(setPosts(updatedPosts));
       navigate("/home");
     }
   }
 
   if (loading) {
-    return <div>{loading}</div>;
+    return <div>Loading ...</div>;
   }
 
   const isAuthor = !!(
@@ -76,9 +72,7 @@ function Post() {
           post={curentPost}
           style={"primary"}
           time={calculateReadingTime(curentPost.content)}
-          onDeleteClick={() => {
-            handleDeletePost();
-          }}
+          onDeleteClick={handleDeletePost}
           isAuthor={isAuthor}
         />
       )}
