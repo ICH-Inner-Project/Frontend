@@ -64,6 +64,34 @@ const UPDATE_POST = gql`
   }
 `;
 
+const CREATE_POST = gql`
+  mutation createPost(
+    $title: String!
+    $content: String!
+    $description: String!
+    $publishedAt: String
+    $image: Upload
+  ) {
+    createPost(
+      title: $title
+      content: $content
+      description: $description
+      publishedAt: $publishedAt
+      image: $image
+    ) {
+      id
+      title
+      content
+      description
+      image
+      authorId
+      createdAt
+      updatedAt
+      publishedAt
+    }
+  }
+`;
+
 export const postService = {
   async getUserPosts(userId: string): Promise<PostResponse[]> {
     const { data } = await apolloClient.query<{ userPosts: PostResponse[] }>({
@@ -110,21 +138,32 @@ export const postService = {
     title: string,
     content: string,
     description: string,
-    publishedAt: string,
+    publishedAt?: string,
     image?: File
   ): Promise<PostResponse> {
     try {
       const imageFile = image || null;
+      const variables: {
+        id: string;
+        title: string;
+        content: string;
+        description: string;
+        publishedAt?: string;
+        image: File | null;
+      } = {
+        id,
+        title,
+        content,
+        description,
+        image: imageFile,
+      };
+
+      if (publishedAt) {
+        variables.publishedAt = publishedAt;
+      }
       const { data } = await apolloClient.mutate<{ updatePost: PostResponse }>({
         mutation: UPDATE_POST,
-        variables: {
-          id,
-          title,
-          content,
-          description,
-          publishedAt,
-          image: imageFile,
-        },
+        variables,
       });
 
       if (!data || !data.updatePost) {
@@ -133,6 +172,44 @@ export const postService = {
       return data.updatePost;
     } catch (error) {
       console.error("Error updating post:", error);
+      throw error;
+    }
+  },
+  async createPost(
+    title: string,
+    content: string,
+    description: string,
+    publishedAt?: string,
+    image?: File
+  ): Promise<PostResponse> {
+    try {
+      const imageFile = image || null;
+      const variables: {
+        title: string;
+        content: string;
+        description: string;
+        publishedAt?: string;
+        image: File | null;
+      } = {
+        title,
+        content,
+        description,
+        image: imageFile,
+      };
+
+      if (publishedAt) {
+        variables.publishedAt = publishedAt;
+      }
+      const { data } = await apolloClient.mutate<{ createPost: PostResponse }>({
+        mutation: CREATE_POST,
+        variables,
+      });
+      if (!data || !data.createPost) {
+        throw new Error("Error creating post, no data received.");
+      }
+      return data.createPost;
+    } catch (error) {
+      console.error("Error creating post:", error);
       throw error;
     }
   },

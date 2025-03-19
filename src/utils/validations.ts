@@ -169,7 +169,9 @@ export const dateTimeValidate = (value: string | undefined) => {
     return "Invalid date format";
   }
 
-  if (selectedDate < now) {
+  now.setUTCHours(0, 0, 0, 0);
+  selectedDate.setUTCHours(0, 0, 0, 0);
+  if (selectedDate.getTime() < now.getTime()) {
     return "Date and time cannot be in the past";
   }
 

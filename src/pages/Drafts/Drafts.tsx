@@ -3,15 +3,17 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import { setPosts, setLoading } from "@redux/slices/postsSlice";
 import PostCard from "@components/PostCardRectangle/PostCard";
-import styles from "./UserPosts.module.css";
+import styles from "./Drafts.module.css";
 import { useNavigate } from "react-router-dom";
 
-function UserPosts({ userId }: { userId: string }) {
+function Drafts({ userId }: { userId: string }) {
   const dispatch = useAppDispatch();
-  const { posts, loading } = useAppSelector((state) => state.posts);
+  const { draftPosts, loading } = useAppSelector((state) => state.posts);
+  const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(setLoading(true));
-    async function fetchUserPosts() {
+    async function fetchDrafts() {
       try {
         const userPosts = await postService.getUserPosts(userId);
         dispatch(setPosts(userPosts));
@@ -22,11 +24,10 @@ function UserPosts({ userId }: { userId: string }) {
       }
     }
     if (userId) {
-      fetchUserPosts();
+      fetchDrafts();
     }
   }, [userId, dispatch]);
 
-  const navigate = useNavigate();
   const handlePostClick = (postId: string) => {
     navigate(`/post/${postId}`);
   };
@@ -35,13 +36,13 @@ function UserPosts({ userId }: { userId: string }) {
     return <div>Loading...</div>;
   }
 
-  if (!posts || posts.length === 0) {
+  if (!draftPosts || draftPosts.length === 0) {
     return <div>No posts avaliable</div>;
   }
 
   return (
     <div className={styles.postsContainer}>
-      {posts.map((post) => (
+      {draftPosts.map((post) => (
         <PostCard
           key={post.id}
           post={post}
@@ -53,4 +54,4 @@ function UserPosts({ userId }: { userId: string }) {
   );
 }
 
-export default UserPosts;
+export default Drafts;
