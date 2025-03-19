@@ -9,8 +9,8 @@ body {
 }
 
 .footer-section {
-  width: 1120px; /* Ширина контейнера */
-  height: 543px; /* Высота контейнера */
+  width: 1120px;
+  height: 543px;
   padding: 20px;
   display: flex;
   justify-content: center;
