@@ -82,6 +82,7 @@ function LogIn() {
         <input
           type="text"
           placeholder="Username"
+          autoComplete="username"
           {...register("username", {
             validate: usernameValidate,
           })}
@@ -99,6 +100,7 @@ function LogIn() {
         <input
           type="password"
           placeholder="Password"
+          autoComplete="current-password"
           {...register("password", {
             validate: passwordValidate,
           })}

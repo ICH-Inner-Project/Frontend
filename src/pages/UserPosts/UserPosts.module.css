@@ -3,3 +3,21 @@
   gap: 60px 30px;
   flex-wrap: wrap;
 }
+
+.userPostsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 20px;
+  align-items: center;
+}
+
+.noPostsAvaliable {
+  text-align: center;
+}

@@ -8,6 +8,10 @@ import { removePost, setPosts, setCurrentPost } from "@redux/slices/postsSlice";
 import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import { UserResponse } from "@customTypes/userTypes";
 import { usersService } from "@services/usersService";
+import {
+  setPaginationMyPosts,
+  setLimitPosts,
+} from "@redux/slices/pagiNationSlice";
 
 function Post() {
   const { postId } = useParams();
@@ -16,6 +20,8 @@ function Post() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [currentUser, setCurentUser] = useState<UserResponse | null>(null);
+  const { pageMyPost, limitMyPost, sortMyPosts, onlyMine, excludeMine } =
+    useAppSelector((state) => state.pagination);
 
   useEffect(() => {
     async function fetchPost() {
@@ -28,12 +34,18 @@ function Post() {
         setCurentUser(fetchedUser);
       } catch (error) {
         console.log(error);
+        if (
+          error instanceof Error &&
+          error.message === "Not authorized. Please log in."
+        ) {
+          navigate("/login");
+        }
       } finally {
         setLoading(false);
       }
     }
     fetchPost();
-  }, [postId, dispatch]);
+  }, [postId, dispatch, navigate]);
 
   function calculateReadingTime(text: string): string {
     const length = text.length;
@@ -46,11 +58,30 @@ function Post() {
   async function handleDeletePost() {
     if (!postId || !curentPost) return;
     const succes = await postService.deletePost(postId);
-    dispatch(removePost(postId));
     if (succes) {
+      dispatch(removePost(postId));
       const updatedPosts = await postService.getUserPosts(curentPost.authorId);
+      const offset = (pageMyPost - 1) * limitMyPost;
+      const updatedLimitedPosts = await postService.getPosts(
+        limitMyPost,
+        offset,
+        onlyMine,
+        excludeMine,
+        sortMyPosts
+      );
       dispatch(setPosts(updatedPosts));
+      dispatch(setLimitPosts(updatedLimitedPosts));
       navigate("/home");
+
+      if (updatedPosts.length === 0 && pageMyPost > 1) {
+        dispatch(
+          setPaginationMyPosts({
+            page: pageMyPost - 1,
+            limit: limitMyPost,
+            sort: sortMyPosts,
+          })
+        );
+      }
     }
   }
 
