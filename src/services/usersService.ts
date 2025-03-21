@@ -249,7 +249,6 @@ export const usersService = {
     const { data } = await apolloClient.query<{ me: UserResponse }>({
       query: GET_USER,
     });
-    console.log(data);
     if (!data || !data.me) {
       throw new Error("Failed to fetch user.");
     }

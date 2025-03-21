@@ -92,6 +92,34 @@ const CREATE_POST = gql`
   }
 `;
 
+const GET_POSTS = gql`
+  query listPosts(
+    $limit: Int = 10
+    $offset: Int = 0
+    $onlyMine: Boolean
+    $excludeMine: Boolean
+    $sort: String
+  ) {
+    listPosts(
+      limit: $limit
+      offset: $offset
+      onlyMine: $onlyMine
+      excludeMine: $excludeMine
+      sort: $sort
+    ) {
+      id
+      title
+      description
+      content
+      image
+      authorId
+      createdAt
+      updatedAt
+      publishedAt
+    }
+  }
+`;
+
 export const postService = {
   async getUserPosts(userId: string): Promise<PostResponse[]> {
     const { data } = await apolloClient.query<{ userPosts: PostResponse[] }>({
@@ -210,6 +238,28 @@ export const postService = {
       return data.createPost;
     } catch (error) {
       console.error("Error creating post:", error);
+      throw error;
+    }
+  },
+  async getPosts(
+    limit?: number,
+    offset?: number,
+    onlyMine?: boolean,
+    excludeMine?: boolean,
+    sort: "new" | "old" = "new"
+  ): Promise<PostResponse[]> {
+    try {
+      const { data } = await apolloClient.query<{ listPosts: PostResponse[] }>({
+        query: GET_POSTS,
+        variables: { limit, offset, onlyMine, excludeMine, sort },
+        fetchPolicy: "network-only",
+      });
+      if (!data || !data.listPosts) {
+        throw new Error("Failed to fetch posts.");
+      }
+      return data.listPosts;
+    } catch (error) {
+      console.error("Error fetching posts:", error);
       throw error;
     }
   },

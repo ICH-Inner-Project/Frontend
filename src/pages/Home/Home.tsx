@@ -11,23 +11,31 @@ import Text from "@components/Text/Text";
 import PostModal from "@pages/PostModal/PostModal";
 import Drafts from "@pages/Drafts/Drafts";
 import { toggleDraftsView } from "@redux/slices/postsSlice";
+import { updateSortPosts, toggleOnlyMine } from "@redux/slices/pagiNationSlice";
+import { apolloClient } from "@graphql/index";
 
 function Home() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isDraftsView = useAppSelector((state) => state.posts.isDraftsView);
+  const { sortMyPosts, sortNotMyPosts, onlyMine } = useAppSelector(
+    (state) => state.pagination
+  );
   const [user, setUser] = useState<UserResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isAscending, setIsAscending] = useState(true);
-  const [isMyPosts, setIsMyPosts] = useState(true);
+  // const [isAscending, setIsAscending] = useState(true);
+  // const [isMyPosts, setIsMyPosts] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const toggleSortOrder = () => {
-    setIsAscending((prev) => !prev);
+    const newSort = onlyMine ? sortMyPosts : sortNotMyPosts;
+    const newSortOrder = newSort === "new" ? "old" : "new";
+    dispatch(updateSortPosts(newSortOrder));
+    // setIsAscending((prev) => !prev);
   };
 
   const toggleNotMyPosts = () => {
-    setIsMyPosts((prev) => !prev);
+    dispatch(toggleOnlyMine());
   };
 
   const toggleIsDraftsView = () => {
@@ -50,15 +58,22 @@ function Home() {
         setUser(fetchedUser);
       } catch (error) {
         console.error("Error loading user", error);
+        if (
+          error instanceof Error &&
+          error.message === "Not authorized. Please log in."
+        ) {
+          navigate("/login");
+        }
       } finally {
         setLoading(false);
       }
     }
     fetchUser();
-  }, []);
+  }, [navigate]);
 
   function Logout() {
     dispatch(logout());
+    apolloClient.resetStore();
     navigate("/login");
   }
 
@@ -78,11 +93,20 @@ function Home() {
           add
         </span>
         <div className={styles.showPostsSettingsContainer}>
-          <div className={styles.orderContainer}>
+          <div
+            className={styles.orderContainer}
+            style={{ visibility: isDraftsView ? "hidden" : "visible" }}
+          >
             <span
               className="material-symbols-outlined"
               style={{
-                transform: isAscending ? "rotate(0deg)" : "rotate(180deg)",
+                transform: onlyMine
+                  ? sortMyPosts === "new"
+                    ? "rotate(0deg)"
+                    : "rotate(180deg)"
+                  : sortNotMyPosts === "new"
+                  ? "rotate(0deg)"
+                  : "rotate(180deg)",
                 fontSize: "15px",
               }}
               onClick={toggleSortOrder}
@@ -91,11 +115,14 @@ function Home() {
             </span>
             <Text content="Order" />
           </div>
-          <div className={styles.notMyPostsContainer}>
+          <div
+            className={styles.notMyPostsContainer}
+            style={{ visibility: isDraftsView ? "hidden" : "visible" }}
+          >
             <span
               className="material-symbols-outlined"
               style={{
-                transform: isMyPosts ? "rotate(0deg)" : "rotate(180deg)",
+                transform: onlyMine ? "rotate(0deg)" : "rotate(180deg)",
                 fontSize: "20px",
               }}
               onClick={toggleNotMyPosts}
@@ -121,11 +148,7 @@ function Home() {
       </div>
       {user &&
         user.id &&
-        (isDraftsView ? (
-          <Drafts userId={user.id} />
-        ) : (
-          <UserPosts userId={user.id} />
-        ))}
+        (isDraftsView ? <Drafts userId={user.id} /> : <UserPosts />)}
       {isDialogOpen && (
         <PostModal onCloseDialog={closeDialog} isNewPost={true} />
       )}

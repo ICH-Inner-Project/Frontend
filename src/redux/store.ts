@@ -3,6 +3,7 @@ import authReducer from "./slices/authSlices";
 import tabReducer from "./slices/tableSlice";
 import usersReducer from "./slices/usersSlice";
 import postsReducer from "./slices/postsSlice";
+import paginationReducer from "./slices/pagiNationSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     tab: tabReducer,
     users: usersReducer,
     posts: postsReducer,
+    pagination: paginationReducer,
   },
 });
 
