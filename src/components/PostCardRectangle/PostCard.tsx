@@ -74,7 +74,6 @@ export default function PostCard({
             ? styles.postCardPrimary
             : styles.postCardSecondary
         }
-        onClick={onClick}
       >
         {style === PostCardStyle.PRIMARY && (
           <div className={styles.topContainer}>
@@ -89,13 +88,23 @@ export default function PostCard({
                 <div className={styles.settingsContainer}>
                   <span
                     className="material-symbols-outlined"
-                    onClick={() => openDialog(post)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openDialog(post);
+                      console.log("edit");
+                    }}
                   >
                     edit
                   </span>
                   <span
                     className="material-symbols-outlined"
-                    onClick={onDeleteClick}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onDeleteClick) {
+                        onDeleteClick();
+                      }
+                      console.log("delete");
+                    }}
                   >
                     delete
                   </span>
@@ -123,6 +132,7 @@ export default function PostCard({
             "https://img.freepik.com/free-photo/closeup-shot-leopard-south-africa_181624-30374.jpg"
           }
           alt="Post"
+          onClick={onClick}
         />
         <div
           className={
@@ -156,6 +166,26 @@ export default function PostCard({
             {style === PostCardStyle.INITIAL ? post.description : post.content}
           </p>
         </div>
+        {style === PostCardStyle.SECONDARY && (
+          <div className={styles.settingsContainer}>
+            {isAuthor && (
+              <div className={styles.settingsContainer}>
+                <span
+                  className="material-symbols-outlined"
+                  onClick={() => openDialog(post)}
+                >
+                  edit
+                </span>
+                <span
+                  className="material-symbols-outlined"
+                  onClick={onDeleteClick}
+                >
+                  delete
+                </span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
       {isDialogOpen && selectedPost && (
         <PostModal

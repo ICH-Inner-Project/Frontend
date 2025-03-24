@@ -5,7 +5,6 @@ import styles from "./Home.module.css";
 import UserPosts from "@pages/UserPosts/UserPosts";
 import { useEffect } from "react";
 import { usersService } from "@services/usersService";
-import { UserResponse } from "@customTypes/userTypes";
 import { useState } from "react";
 import Text from "@components/Text/Text";
 import PostModal from "@pages/PostModal/PostModal";
@@ -13,6 +12,7 @@ import Drafts from "@pages/Drafts/Drafts";
 import { toggleDraftsView } from "@redux/slices/postsSlice";
 import { updateSortPosts, toggleOnlyMine } from "@redux/slices/pagiNationSlice";
 import { apolloClient } from "@graphql/index";
+import { setCurrentUser } from "@redux/slices/usersSlice";
 
 function Home() {
   const navigate = useNavigate();
@@ -21,7 +21,8 @@ function Home() {
   const { sortMyPosts, sortNotMyPosts, onlyMine } = useAppSelector(
     (state) => state.pagination
   );
-  const [user, setUser] = useState<UserResponse | null>(null);
+  const user = useAppSelector((state) => state.users.currentUser);
+  // const [user, setUser] = useState<UserResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   // const [isAscending, setIsAscending] = useState(true);
   // const [isMyPosts, setIsMyPosts] = useState(true);
@@ -55,7 +56,7 @@ function Home() {
     async function fetchUser() {
       try {
         const fetchedUser = await usersService.getUser();
-        setUser(fetchedUser);
+        dispatch(setCurrentUser(fetchedUser));
       } catch (error) {
         console.error("Error loading user", error);
         if (
@@ -69,7 +70,7 @@ function Home() {
       }
     }
     fetchUser();
-  }, [navigate]);
+  }, [navigate, dispatch]);
 
   function Logout() {
     dispatch(logout());

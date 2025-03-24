@@ -1,5 +1,6 @@
 .postCardInitial,
-.postCardPrimary {
+.postCardPrimary,
+.postCardSecondary {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -19,8 +20,15 @@
   max-width: 330px;
 }
 
+.postCardSecondary {
+  flex-direction: row;
+  max-width: 500px;
+  gap: 40px;
+}
+
 .postImageInitial,
-.postImagePrimary {
+.postImagePrimary,
+.postImageSecondary {
   width: 100%;
   aspect-ratio: 3/ 2;
   object-fit: cover;
@@ -31,6 +39,11 @@
   height: 80%;
   border-radius: 25px;
 }
+
+.postImageSecondary {
+  width: 40%;
+}
+
 .postContentInitial,
 .postContentPrimary {
   width: 100%;
@@ -40,14 +53,22 @@
   align-items: flex-start;
   text-align: left;
   padding: 15px;
-  box-sizing: border-box;
+}
+
+.postContentSecondary {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  height: 100%;
 }
 
 .postContentPrimary {
   padding: 50px;
 }
 
-.postTitleInitial.postTitlePrimary {
+.postTitleInitial.postTitlePrimary,
+.postTitleSecondary {
   font-size: 16px;
   font-weight: 500;
   color: rgba(79, 79, 79, 1);
@@ -59,7 +80,8 @@
 }
 
 .postTextInitial,
-.postTextPrimary {
+.postTextPrimary,
+.postTextSecondary {
   font-size: 16px;
   color: rgba(79, 79, 79, 1);
   margin-top: 23px;
