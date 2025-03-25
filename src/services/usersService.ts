@@ -133,6 +133,15 @@ export const GET_USER = gql`
   }
 `;
 
+const UPDATE_AVATAR = gql`
+  mutation updateAvatar($id: ID!, $avatar: Upload) {
+    updateUser(id: $id, avatar: $avatar) {
+      id
+      avatar
+    }
+  }
+`;
+
 export const usersService = {
   async getUsers(): Promise<UserResponse[]> {
     const { data } = await apolloClient.query<UsersQueryResponse>({
@@ -196,6 +205,27 @@ export const usersService = {
       return data.updateUser;
     } catch (error) {
       console.error("Error updating user:", error);
+      throw error;
+    }
+  },
+  async updateAvatar(id: string, avatar?: File): Promise<UserResponse> {
+    try {
+      const avatarFile = avatar || null;
+      const { data } = await apolloClient.mutate<{
+        updateUser: UserResponse;
+      }>({
+        mutation: UPDATE_AVATAR,
+        variables: {
+          id,
+          avatar: avatarFile,
+        },
+      });
+      if (!data || !data.updateUser) {
+        throw new Error("Error updating avatar, no data received.");
+      }
+      return data.updateUser;
+    } catch (error) {
+      console.error("Error updating avatar:", error);
       throw error;
     }
   },

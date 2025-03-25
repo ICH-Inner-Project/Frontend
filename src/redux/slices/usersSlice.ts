@@ -23,11 +23,13 @@ interface User {
 
 interface UsersState {
   users: User[];
+  currentUser: User | null;
   loading: boolean;
 }
 
 const initialState: UsersState = {
   users: [],
+  currentUser: null,
   loading: false,
 };
 
@@ -41,8 +43,11 @@ const usersSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    setCurrentUser: (state, action: PayloadAction<User | null>) => {
+      state.currentUser = action.payload;
+    },
   },
 });
 
-export const { setUsers, setLoading } = usersSlice.actions;
+export const { setUsers, setLoading, setCurrentUser } = usersSlice.actions;
 export default usersSlice.reducer;

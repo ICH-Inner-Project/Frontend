@@ -64,6 +64,15 @@ export default function PostCard({
     navigate("/home");
   }
 
+  const handlePostCardClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest(".material-symbols-outlined")) {
+      e.stopPropagation();
+    } else if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <>
       <div
@@ -74,7 +83,7 @@ export default function PostCard({
             ? styles.postCardPrimary
             : styles.postCardSecondary
         }
-        onClick={onClick}
+        onClick={handlePostCardClick}
       >
         {style === PostCardStyle.PRIMARY && (
           <div className={styles.topContainer}>
@@ -82,6 +91,7 @@ export default function PostCard({
               <span
                 className="material-symbols-outlined"
                 onClick={navigateToPosts}
+                style={{ cursor: "pointer" }}
               >
                 arrow_back
               </span>
@@ -89,13 +99,25 @@ export default function PostCard({
                 <div className={styles.settingsContainer}>
                   <span
                     className="material-symbols-outlined"
-                    onClick={() => openDialog(post)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openDialog(post);
+                      console.log("edit");
+                    }}
+                    style={{ zIndex: 3000, cursor: "pointer" }}
                   >
                     edit
                   </span>
                   <span
                     className="material-symbols-outlined"
-                    onClick={onDeleteClick}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onDeleteClick) {
+                        onDeleteClick();
+                      }
+                      console.log("delete");
+                    }}
+                    style={{ zIndex: 3000, cursor: "pointer" }}
                   >
                     delete
                   </span>
@@ -156,6 +178,28 @@ export default function PostCard({
             {style === PostCardStyle.INITIAL ? post.description : post.content}
           </p>
         </div>
+        {style === PostCardStyle.SECONDARY && (
+          <div className={styles.settingsContainer}>
+            {isAuthor && (
+              <div className={styles.settingsContainer}>
+                <span
+                  className="material-symbols-outlined"
+                  onClick={() => openDialog(post)}
+                  style={{ zIndex: 3000, cursor: "pointer" }}
+                >
+                  edit
+                </span>
+                <span
+                  className="material-symbols-outlined"
+                  onClick={onDeleteClick}
+                  style={{ zIndex: 3000, cursor: "pointer" }}
+                >
+                  delete
+                </span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
       {isDialogOpen && selectedPost && (
         <PostModal

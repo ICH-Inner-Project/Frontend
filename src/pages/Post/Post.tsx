@@ -6,7 +6,7 @@ import styles from "./Post.module.css";
 import { useNavigate } from "react-router-dom";
 import { removePost, setPosts, setCurrentPost } from "@redux/slices/postsSlice";
 import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
-import { UserResponse } from "@customTypes/userTypes";
+import { setCurrentUser } from "@redux/slices/usersSlice";
 import { usersService } from "@services/usersService";
 import {
   setPaginationMyPosts,
@@ -19,7 +19,8 @@ function Post() {
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [currentUser, setCurentUser] = useState<UserResponse | null>(null);
+  // const [currentUser, setCurentUser] = useState<UserResponse | null>(null);
+  const currentUser = useAppSelector((state) => state.users.currentUser);
   const { pageMyPost, limitMyPost, sortMyPosts, onlyMine, excludeMine } =
     useAppSelector((state) => state.pagination);
 
@@ -31,7 +32,7 @@ function Post() {
         const fetchedPost = await postService.getPost(postId);
         dispatch(setCurrentPost(fetchedPost));
         const fetchedUser = await usersService.getUser();
-        setCurentUser(fetchedUser);
+        dispatch(setCurrentUser(fetchedUser));
       } catch (error) {
         console.log(error);
         if (

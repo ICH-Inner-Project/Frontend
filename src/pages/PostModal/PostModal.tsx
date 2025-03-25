@@ -11,7 +11,7 @@ import {
   dateTimeValidate,
 } from "@utils/validations";
 import { postService } from "@services/postService";
-import { setCurrentPost } from "@redux/slices/postsSlice";
+import { setCurrentPost, setPosts } from "@redux/slices/postsSlice";
 import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import { useEffect, useState } from "react";
 import { ApolloError } from "@apollo/client";
@@ -105,7 +105,7 @@ function PostModal({ post, onCloseDialog, isNewPost }: PostModalProps) {
       const truncatedContent = truncateText(formData.content, 1000);
 
       const fileToUpload = await handleFileUpload(formData);
-
+      console.log(isNewPost, "isNewPost");
       if (isNewPost) {
         const response = await postService.createPost(
           truncatedTitle,
@@ -129,19 +129,22 @@ function PostModal({ post, onCloseDialog, isNewPost }: PostModalProps) {
         }
       } else {
         if (post) {
+          console.log(post, "POOOOSTTTT");
           const response = await postService.updatePost(
             post.id,
             truncatedTitle,
             truncatedContent,
             truncatedDescription,
-            isPostInDraft ? undefined : formData.publishedAt || post.createdAt,
+            isPostInDraft ? undefined : formData.publishedAt,
             fileToUpload
           );
           if (response) {
-            reset();
-            onCloseDialog();
             const newPost = await postService.getPost(post.id);
             dispatch(setCurrentPost(newPost));
+            const updatedPosts = await postService.getUserPosts(post.authorId);
+            dispatch(setPosts(updatedPosts));
+            reset();
+            onCloseDialog();
           } else {
             console.log("No data received from update");
           }
@@ -267,6 +270,7 @@ function PostModal({ post, onCloseDialog, isNewPost }: PostModalProps) {
                         ? "rotate(180deg)"
                         : "rotate(0deg)",
                       fontSize: "20px",
+                      cursor: "pointer",
                     }}
                     onClick={togglePostInDraft}
                   >
