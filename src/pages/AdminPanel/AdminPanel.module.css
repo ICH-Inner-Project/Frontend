@@ -11,6 +11,10 @@
   justify-content: center;
 }
 
+.admiAcessMessage {
+  text-align: center;
+}
+
 .containerAccount {
   padding: 57px 0px 90px 73px;
 }

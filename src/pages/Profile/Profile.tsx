@@ -101,7 +101,9 @@ function Profile() {
     setIsDialogCreatePostOpen(false);
   };
 
-  const openDialogEditProfile = () => {
+  const openDialogEditProfile = async () => {
+    const fetchedUser = await usersService.getUser();
+    setEditUser(fetchedUser);
     setIsDialogEditProfile(true);
   };
 
@@ -181,7 +183,7 @@ function Profile() {
   }, [previewImage]);
 
   if (loading) {
-    return <div>Loading ...</div>;
+    return <div className={styles.loading}>Loading ...</div>;
   }
 
   return (

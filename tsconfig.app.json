@@ -31,7 +31,8 @@
       "@redux/*": ["redux/*"],
       "@services/*": ["services/*"],
       "@customTypes/*": ["types/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@layouts/*": ["layouts/*"]
     }
   },
   "include": ["src/**/*"]

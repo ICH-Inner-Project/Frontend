@@ -1,10 +1,8 @@
-import Link from "@components/Link/Link";
 import { useForm } from "react-hook-form";
 import Button from "@components/Button/Button";
 import Text from "@components/Text/Text";
 import Title from "@components/Title/Title";
 import styles from "./ContactUs.module.css";
-import { useNavigate } from "react-router-dom";
 import {
   yournameValidate,
   emailValidate,
@@ -20,7 +18,6 @@ function ContactUs() {
   } = useForm<{ yourname: string; yourEmail: string; content: string }>({
     mode: "onChange",
   });
-  const navigate = useNavigate();
 
   const handleContactForm = async (formData: {
     yourname: string;
@@ -40,19 +37,6 @@ function ContactUs() {
   return (
     <div className={styles.container}>
       <div className={styles.contentContainer}>
-        <Link
-          text="Home"
-          onClick={() => {
-            navigate("/home");
-          }}
-          inlineStyles={{
-            fontSize: "16px",
-            textDecoration: "underline",
-            paddingBottom: "146px",
-            paddingLeft: "30px",
-          }}
-        />
-
         <Title
           content="Contact us!"
           inlineStyles={{
