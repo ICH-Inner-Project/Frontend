@@ -40,6 +40,8 @@ function Profile() {
   const [editUser, setEditUser] = useState<EditUser | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<PostResponse[]>([]);
 
   useEffect(() => {
     async function fetchedData() {
@@ -55,13 +57,19 @@ function Profile() {
         }
       } catch (error) {
         console.log("Error loading user or posts", error);
+        if (
+          error instanceof Error &&
+          error.message === "Not authorized. Please log in."
+        ) {
+          navigate("/login");
+        }
       } finally {
         setLoading(false);
         setLoadingPosts(false);
       }
     }
     fetchedData();
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   const handlePostClick = (postId: string) => {
     navigate(`/post/${postId}`);
@@ -144,6 +152,25 @@ function Profile() {
     const createData = new Date(timestamp).toISOString().split("T")[0];
     return createData.split("-").reverse().join(".");
   }
+
+  const handleSearchChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+
+    if (query.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+      const posts = await postService.searchPosts(query);
+      setSearchResults(posts);
+    } catch (error) {
+      console.error("Error searching posts:", error);
+    }
+  };
 
   useEffect(() => {
     return () => {
@@ -246,13 +273,34 @@ function Profile() {
             />
             <div className={styles.line}></div>
           </div>
-
-          {posts.length > 0 ? (
+          <div className={styles.searchInputContainer}>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Search for posts..."
+              className={styles.searchInput}
+            />
+          </div>
+          {searchQuery.trim() !== "" && searchResults.length === 0 ? (
+            <p>No posts found</p>
+          ) : searchResults.length > 0 ? (
+            searchResults.map((post) => (
+              <PostCard
+                key={post.id}
+                post={post}
+                style="secondary"
+                onClick={() => handlePostClick(post.id)}
+                isAuthor={currentUser?.id === post.authorId}
+                onDeleteClick={() => handleDeletePost(post.id, post)}
+              />
+            ))
+          ) : posts.length > 0 ? (
             posts.map((post) => (
               <PostCard
                 key={post.id}
                 post={post}
-                style={"secondary"}
+                style="secondary"
                 onClick={() => handlePostClick(post.id)}
                 isAuthor={currentUser?.id === post.authorId}
                 onDeleteClick={() => handleDeletePost(post.id, post)}

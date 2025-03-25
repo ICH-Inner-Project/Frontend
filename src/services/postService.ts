@@ -120,6 +120,22 @@ const GET_POSTS = gql`
   }
 `;
 
+const SEARCH_POSTS = gql`
+  query searchPosts($query: String!) {
+    searchPosts(query: $query) {
+      id
+      title
+      content
+      authorId
+      image
+      publishedAt
+      description
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const postService = {
   async getUserPosts(userId: string): Promise<PostResponse[]> {
     const { data } = await apolloClient.query<{ userPosts: PostResponse[] }>({
@@ -260,6 +276,23 @@ export const postService = {
       return data.listPosts;
     } catch (error) {
       console.error("Error fetching posts:", error);
+      throw error;
+    }
+  },
+  async searchPosts(query: string): Promise<PostResponse[]> {
+    try {
+      const { data } = await apolloClient.query<{
+        searchPosts: PostResponse[];
+      }>({
+        query: SEARCH_POSTS,
+        variables: { query },
+      });
+      if (!data || !data.searchPosts) {
+        throw new Error("Failed to fetching posts for query");
+      }
+      return data.searchPosts;
+    } catch (error) {
+      console.error(`Error fetching posts for query "${query}":`, error);
       throw error;
     }
   },

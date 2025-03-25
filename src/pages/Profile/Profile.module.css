@@ -84,3 +84,17 @@
   height: 1px;
   background-color: #d3d3d3;
 }
+
+.searchInput {
+  width: 100%;
+  max-width: 300px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.searchInputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  width: 100%;
+}
