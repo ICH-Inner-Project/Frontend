@@ -64,6 +64,15 @@ export default function PostCard({
     navigate("/home");
   }
 
+  const handlePostCardClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest(".material-symbols-outlined")) {
+      e.stopPropagation();
+    } else if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <>
       <div
@@ -74,6 +83,7 @@ export default function PostCard({
             ? styles.postCardPrimary
             : styles.postCardSecondary
         }
+        onClick={handlePostCardClick}
       >
         {style === PostCardStyle.PRIMARY && (
           <div className={styles.topContainer}>
@@ -81,6 +91,7 @@ export default function PostCard({
               <span
                 className="material-symbols-outlined"
                 onClick={navigateToPosts}
+                style={{ cursor: "pointer" }}
               >
                 arrow_back
               </span>
@@ -93,6 +104,7 @@ export default function PostCard({
                       openDialog(post);
                       console.log("edit");
                     }}
+                    style={{ zIndex: 3000, cursor: "pointer" }}
                   >
                     edit
                   </span>
@@ -105,6 +117,7 @@ export default function PostCard({
                       }
                       console.log("delete");
                     }}
+                    style={{ zIndex: 3000, cursor: "pointer" }}
                   >
                     delete
                   </span>
@@ -132,7 +145,6 @@ export default function PostCard({
             "https://img.freepik.com/free-photo/closeup-shot-leopard-south-africa_181624-30374.jpg"
           }
           alt="Post"
-          onClick={onClick}
         />
         <div
           className={
@@ -173,12 +185,14 @@ export default function PostCard({
                 <span
                   className="material-symbols-outlined"
                   onClick={() => openDialog(post)}
+                  style={{ zIndex: 3000, cursor: "pointer" }}
                 >
                   edit
                 </span>
                 <span
                   className="material-symbols-outlined"
                   onClick={onDeleteClick}
+                  style={{ zIndex: 3000, cursor: "pointer" }}
                 >
                   delete
                 </span>

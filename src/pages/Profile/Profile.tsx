@@ -211,6 +211,7 @@ function Profile() {
             <span
               className="material-symbols-outlined"
               onClick={openDialogEditProfile}
+              style={{ cursor: "pointer" }}
             >
               edit
             </span>
@@ -247,6 +248,7 @@ function Profile() {
                 backgroundColor: "black",
                 fontSize: "15px",
                 padding: "5px",
+                cursor: "pointer",
               }}
               onClick={openDialogCreatePost}
             >
@@ -273,15 +275,14 @@ function Profile() {
             />
             <div className={styles.line}></div>
           </div>
-          <div className={styles.searchInputContainer}>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder="Search for posts..."
-              className={styles.searchInput}
-            />
-          </div>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search for posts..."
+            className={styles.searchInput}
+          />
+
           {searchQuery.trim() !== "" && searchResults.length === 0 ? (
             <p>No posts found</p>
           ) : searchResults.length > 0 ? (

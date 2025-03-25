@@ -66,7 +66,12 @@ export default function Table({ users, ondeleteUser }: TableProps) {
               <td>
                 <button onClick={() => openDialog(user)}>Edit</button>
                 <button onClick={() => ondeleteUser(user.id)}>
-                  <span className="material-symbols-outlined">delete</span>
+                  <span
+                    className="material-symbols-outlined"
+                    style={{ cursor: "pointer" }}
+                  >
+                    delete
+                  </span>
                 </button>
               </td>
             </tr>

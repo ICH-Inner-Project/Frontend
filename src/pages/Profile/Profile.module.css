@@ -67,6 +67,8 @@
 .userPostsContainer {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100%;
   width: 100%;
   max-width: 800px;
@@ -90,11 +92,4 @@
   max-width: 300px;
   padding: 5px;
   border-radius: 5px;
-}
-
-.searchInputContainer {
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  width: 100%;
 }

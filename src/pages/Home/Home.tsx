@@ -88,7 +88,12 @@ function Home() {
       <div className={styles.postsSettingsContainer}>
         <span
           className="material-symbols-outlined"
-          style={{ color: "white", backgroundColor: "black", fontSize: "15px" }}
+          style={{
+            color: "white",
+            backgroundColor: "black",
+            fontSize: "15px",
+            cursor: "pointer",
+          }}
           onClick={openDialog}
         >
           add
@@ -109,6 +114,7 @@ function Home() {
                   ? "rotate(0deg)"
                   : "rotate(180deg)",
                 fontSize: "15px",
+                cursor: "pointer",
               }}
               onClick={toggleSortOrder}
             >
@@ -125,6 +131,7 @@ function Home() {
               style={{
                 transform: onlyMine ? "rotate(0deg)" : "rotate(180deg)",
                 fontSize: "20px",
+                cursor: "pointer",
               }}
               onClick={toggleNotMyPosts}
             >
@@ -138,6 +145,7 @@ function Home() {
               style={{
                 transform: isDraftsView ? "rotate(180deg)" : "rotate(0deg)",
                 fontSize: "20px",
+                cursor: "pointer",
               }}
               onClick={toggleIsDraftsView}
             >

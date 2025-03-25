@@ -270,6 +270,7 @@ function PostModal({ post, onCloseDialog, isNewPost }: PostModalProps) {
                         ? "rotate(180deg)"
                         : "rotate(0deg)",
                       fontSize: "20px",
+                      cursor: "pointer",
                     }}
                     onClick={togglePostInDraft}
                   >
