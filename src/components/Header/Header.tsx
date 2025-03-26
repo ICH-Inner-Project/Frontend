@@ -41,7 +41,7 @@ function Header() {
             navigate("/contact");
           }}
         />
-        <div className={styles.userMenu}>
+        <div className={styles.userMenu} id="menu" tabIndex="0">
           <Text
             content={`Hello, ${user ? user.username : "Guest"}`}
             inlineStyles={{ fontSize: "16px" }}

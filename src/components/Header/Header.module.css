@@ -44,7 +44,7 @@
   transform: translateY(-10px);
 }
 
-.userMenu:hover .dropdownMenu {
+.userMenu:hover .dropdownMenu, .userMenu:focus-within .dropdownMenu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
