@@ -10,6 +10,7 @@
   flex-direction: column;
   align-items: stretch;
   padding: 15px;
+  cursor: pointer;
 }
 .postCardPrimary {
   height: 100vh;
