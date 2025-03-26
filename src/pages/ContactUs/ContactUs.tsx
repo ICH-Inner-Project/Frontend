@@ -8,6 +8,7 @@ import {
   emailValidate,
   contentValidate,
 } from "@utils/validations";
+import { usersService } from "@services/usersService";
 
 function ContactUs() {
   const {
@@ -26,8 +27,18 @@ function ContactUs() {
   }) => {
     try {
       console.log(formData);
-      reset();
-      alert("The data has been successfully submitted");
+      const response = await usersService.sendEmail(
+        formData.yourEmail,
+        "exmple@gmail.com", // прописать почту нашей техподдержки
+        `New message from ${formData.yourname}`,
+        formData.content
+      );
+      if (response) {
+        alert("The message has been successfully sent!");
+        reset();
+      } else {
+        throw new Error("Failed to send the message.");
+      }
     } catch (error) {
       console.log(error);
       alert("Failed to submit the data. Please try again");

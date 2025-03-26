@@ -142,6 +142,17 @@ const UPDATE_AVATAR = gql`
   }
 `;
 
+export const SEND_EMAIL_MUTATION = gql`
+  mutation sendEmail(
+    $from: String!
+    $to: String!
+    $subject: String!
+    $body: String!
+  ) {
+    sendEmail(from: $from, to: $to, subject: $subject, body: $body)
+  }
+`;
+
 export const usersService = {
   async getUsers(): Promise<UserResponse[]> {
     const { data } = await apolloClient.query<UsersQueryResponse>({
@@ -283,5 +294,27 @@ export const usersService = {
       throw new Error("Failed to fetch user.");
     }
     return data.me;
+  },
+  async sendEmail(
+    from: string,
+    to: string,
+    subject: string,
+    body: string
+  ): Promise<boolean> {
+    try {
+      const { data } = await apolloClient.mutate<{ sendEmail: boolean }>({
+        mutation: SEND_EMAIL_MUTATION,
+        variables: { from, to, subject, body },
+      });
+
+      if (!data || data.sendEmail === undefined) {
+        throw new Error("Error sending email, no data received.");
+      }
+
+      return data.sendEmail;
+    } catch (error) {
+      console.error("Error sending email:", error);
+      throw error;
+    }
   },
 };
