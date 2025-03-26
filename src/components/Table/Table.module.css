@@ -32,3 +32,10 @@
   display: flex;
   justify-content: space-between;
 }
+
+@media (max-width: 768px) {
+  .table {
+    width: 90%;
+    max-width: 100%;
+  }
+}

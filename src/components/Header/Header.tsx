@@ -5,11 +5,32 @@ import { useAppSelector, useAppDispatch } from "@hooks/reduxHooks";
 import { logout } from "@redux/slices/authSlices";
 import { apolloClient } from "@graphql/index";
 import Text from "@components/Text/Text";
+import { useState, useRef, useEffect } from "react";
 
 function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.users.currentUser);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  function toggleMenu() {
+    setIsMenuOpen((prev) => !prev);
+  }
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   function Logout() {
     dispatch(logout());
@@ -25,6 +46,7 @@ function Header() {
           onClick={() => {
             navigate("/home");
           }}
+          inlineStyles={{ lineHeight: "14.06px" }}
         />
       </div>
 
@@ -34,33 +56,62 @@ function Header() {
           onClick={() => {
             navigate("/about");
           }}
+          inlineStyles={{ lineHeight: "14.06px" }}
         />
         <Link
           text="Contact"
           onClick={() => {
             navigate("/contact");
           }}
+          inlineStyles={{ lineHeight: "14.06px" }}
         />
-        <div className={styles.userMenu} id="menu" tabIndex="0">
-          <Text
-            content={`Hello, ${user ? user.username : "Guest"}`}
-            inlineStyles={{ fontSize: "16px" }}
-          />
-
-          <span className={styles.userName}></span>
-          <div className={styles.dropdownMenu}>
+        <div className={styles.userMenu}>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleMenu();
+            }}
+          >
+            <Text
+              content={`Hello, ${user ? user.username : "Guest"}`}
+              inlineStyles={{ fontSize: "16px" }}
+            />
+          </div>
+          <div
+            ref={menuRef}
+            className={styles.dropdownMenu}
+            style={{
+              opacity: isMenuOpen ? 1 : 0,
+              visibility: isMenuOpen ? "visible" : "hidden",
+              transform: isMenuOpen ? "translateY(0)" : "translateY(-10px)",
+            }}
+          >
             <Link
               onClick={() => {
                 navigate("/profile");
+                toggleMenu();
               }}
               text="Profile"
             />
-            <Link onClick={Logout} text="Exit" />
-            <Link onClick={Logout} text="Log in with another account" />
+            <Link
+              onClick={() => {
+                Logout();
+                toggleMenu();
+              }}
+              text="Exit"
+            />
+            <Link
+              onClick={() => {
+                Logout();
+                toggleMenu();
+              }}
+              text="Log in with another account"
+            />
             {user?.role === "admin" && (
               <Link
                 onClick={() => {
                   navigate("/admin");
+                  toggleMenu();
                 }}
                 text="Admin panel"
               />

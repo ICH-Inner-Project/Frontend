@@ -104,7 +104,7 @@ export default function PostCard({
                       openDialog(post);
                       console.log("edit");
                     }}
-                    style={{ zIndex: 3000, cursor: "pointer" }}
+                    style={{ cursor: "pointer" }}
                   >
                     edit
                   </span>
@@ -117,7 +117,7 @@ export default function PostCard({
                       }
                       console.log("delete");
                     }}
-                    style={{ zIndex: 3000, cursor: "pointer" }}
+                    style={{ cursor: "pointer" }}
                   >
                     delete
                   </span>
@@ -185,14 +185,14 @@ export default function PostCard({
                 <span
                   className="material-symbols-outlined"
                   onClick={() => openDialog(post)}
-                  style={{ zIndex: 3000, cursor: "pointer" }}
+                  style={{ cursor: "pointer" }}
                 >
                   edit
                 </span>
                 <span
                   className="material-symbols-outlined"
                   onClick={onDeleteClick}
-                  style={{ zIndex: 3000, cursor: "pointer" }}
+                  style={{ cursor: "pointer" }}
                 >
                   delete
                 </span>
