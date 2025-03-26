@@ -64,15 +64,20 @@ export default function Table({ users, ondeleteUser }: TableProps) {
               <td>{user.username}</td>
               <td>{user.dateCreated}</td>
               <td>
-                <button onClick={() => openDialog(user)}>Edit</button>
-                <button onClick={() => ondeleteUser(user.id)}>
-                  <span
-                    className="material-symbols-outlined"
-                    style={{ cursor: "pointer" }}
-                  >
-                    delete
-                  </span>
-                </button>
+                <span
+                  className="material-symbols-outlined"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => openDialog(user)}
+                >
+                  edit
+                </span>
+                <span
+                  className="material-symbols-outlined"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => ondeleteUser(user.id)}
+                >
+                  delete
+                </span>
               </td>
             </tr>
           ))}

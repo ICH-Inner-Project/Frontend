@@ -87,7 +87,7 @@ function Post() {
   }
 
   if (loading) {
-    return <div>Loading ...</div>;
+    return <div className={styles.loading}>Loading ...</div>;
   }
 
   const isAuthor = !!(

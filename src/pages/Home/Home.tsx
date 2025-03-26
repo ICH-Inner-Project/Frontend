@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { logout } from "@redux/slices/authSlices";
+
 import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import styles from "./Home.module.css";
 import UserPosts from "@pages/UserPosts/UserPosts";
@@ -11,8 +11,9 @@ import PostModal from "@pages/PostModal/PostModal";
 import Drafts from "@pages/Drafts/Drafts";
 import { toggleDraftsView } from "@redux/slices/postsSlice";
 import { updateSortPosts, toggleOnlyMine } from "@redux/slices/pagiNationSlice";
-import { apolloClient } from "@graphql/index";
+
 import { setCurrentUser } from "@redux/slices/usersSlice";
+import Title from "@components/Title/Title";
 
 function Home() {
   const navigate = useNavigate();
@@ -72,19 +73,16 @@ function Home() {
     fetchUser();
   }, [navigate, dispatch]);
 
-  function Logout() {
-    dispatch(logout());
-    apolloClient.resetStore();
-    navigate("/login");
-  }
-
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className={styles.container}>
-      <button onClick={Logout}>Logout</button>
+      <Title
+        content="Blog"
+        inlineStyles={{ marginLeft: 0, marginRight: "auto" }}
+      />
       <div className={styles.postsSettingsContainer}>
         <span
           className="material-symbols-outlined"

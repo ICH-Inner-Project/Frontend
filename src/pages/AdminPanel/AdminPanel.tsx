@@ -5,11 +5,25 @@ import CreateAccount from "@pages/CreateAccount/CreateAccount";
 import ListOfAccount from "@pages/ListOfAccounts/ListOfAccount";
 import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import { setSelectedTab } from "@redux/slices/tableSlice";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AdminPanel() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const user = useAppSelector((state) => state.auth.user);
   const selectedTab = useAppSelector((state) => state.tab.selectedTab);
-  return (
+
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      const timer = setTimeout(() => {
+        navigate("/home");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [user, navigate]);
+
+  return user?.role === "admin" ? (
     <div
       className={
         selectedTab === "list" ? styles.containerList : styles.containerAccount
@@ -41,6 +55,10 @@ function AdminPanel() {
         </div>
       </div>
       {selectedTab === "list" ? <ListOfAccount /> : <CreateAccount />}
+    </div>
+  ) : (
+    <div className={styles.admiAcessMessage}>
+      Only the administrator has access to the admin panel
     </div>
   );
 }
