@@ -43,14 +43,14 @@ function AdminPanel() {
             onClick={() => {
               dispatch(setSelectedTab("create"));
             }}
-            inlineStyles={{ fontSize: "24px" }}
+            inlineStyles={{ fontSize: "24px", cursor: "pointer" }}
           />
           <Link
             text="List of accounts"
             onClick={() => {
               dispatch(setSelectedTab("list"));
             }}
-            inlineStyles={{ fontSize: "24px" }}
+            inlineStyles={{ fontSize: "24px", cursor: "pointer" }}
           />
         </div>
       </div>

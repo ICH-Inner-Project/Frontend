@@ -46,7 +46,7 @@ function Header() {
           onClick={() => {
             navigate("/home");
           }}
-          inlineStyles={{ lineHeight: "14.06px" }}
+          inlineStyles={{ lineHeight: "14.06px", cursor: "pointer" }}
         />
       </div>
 
@@ -56,14 +56,14 @@ function Header() {
           onClick={() => {
             navigate("/about");
           }}
-          inlineStyles={{ lineHeight: "14.06px" }}
+          inlineStyles={{ lineHeight: "14.06px", cursor: "pointer" }}
         />
         <Link
           text="Contact"
           onClick={() => {
             navigate("/contact");
           }}
-          inlineStyles={{ lineHeight: "14.06px" }}
+          inlineStyles={{ lineHeight: "14.06px", cursor: "pointer" }}
         />
         <div className={styles.userMenu}>
           <div
@@ -74,7 +74,7 @@ function Header() {
           >
             <Text
               content={`Hello, ${user ? user.username : "Guest"}`}
-              inlineStyles={{ fontSize: "16px" }}
+              inlineStyles={{ fontSize: "16px", cursor: "pointer" }}
             />
           </div>
           <div
