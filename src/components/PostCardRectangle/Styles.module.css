@@ -22,7 +22,7 @@
 
 .postCardSecondary {
   flex-direction: row;
-  max-width: 500px;
+  max-width: 650px;
   gap: 40px;
 }
 
@@ -106,4 +106,33 @@
 .settingsContainer {
   display: flex;
   gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .postCardSecondary {
+    max-width: 400px;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .postCardSecondary {
+    flex-direction: column;
+  }
+  .postImageSecondary {
+    width: 100%;
+  }
+  ._postContentSecondary {
+    width: 100%;
+  }
+
+  .postCardSecondary .settingsContainer {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .postContentPrimary {
+    padding: 25px;
+  }
 }

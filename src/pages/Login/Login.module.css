@@ -15,8 +15,9 @@
 
 .formContainer {
   display: flex;
+  max-width: 400px;
   flex-direction: column;
-  width: 400px;
+  width: 100%;
   gap: 14px;
 }
 
@@ -34,4 +35,11 @@
 input:focus,
 input:active {
   outline: none;
+}
+
+@media (max-width: 420px) {
+  .formContainer {
+    width: 90%;
+    max-width: 100%;
+  }
 }

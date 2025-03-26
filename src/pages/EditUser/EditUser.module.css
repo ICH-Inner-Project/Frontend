@@ -23,7 +23,7 @@
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  max-width: 1000px;
+  max-width: 900px;
   width: 100%;
   gap: 40px;
 }
@@ -77,4 +77,34 @@ input[type="file"]::-webkit-file-upload-button {
 .buttonContainer {
   display: flex;
   gap: 20px;
+}
+
+@media (max-width: 960px) {
+  .modalContent {
+    width: 90%;
+    max-width: 100%;
+  }
+  .container {
+    gap: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .leftContainer {
+    gap: 20px;
+  }
+
+  .rightContainer {
+    gap: 20px;
+  }
 }

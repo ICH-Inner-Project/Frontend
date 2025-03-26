@@ -74,7 +74,7 @@
   align-items: center;
   height: 100%;
   width: 100%;
-  max-width: 800px;
+  max-width: 750px;
   gap: 30px;
 }
 
@@ -92,7 +92,25 @@
 
 .searchInput {
   width: 100%;
-  max-width: 300px;
+  max-width: 400px;
   padding: 5px;
   border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .userPostsContainer,
+  .userInfoContainer {
+    width: 90%;
+    max-width: 100%;
+  }
+
+  .container {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 420px) {
+  .container {
+    gap: 50px;
+  }
 }
