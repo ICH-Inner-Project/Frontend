@@ -1,0 +1,110 @@
+.modalContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3;
+}
+
+.container {
+  display: flex;
+  gap: 100px;
+}
+
+.modalContent {
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 900px;
+  width: 100%;
+  gap: 40px;
+}
+
+.formContainer {
+  display: flex;
+  width: 1080px;
+  gap: 280px;
+  height: 100%;
+}
+
+.input {
+  max-width: 400px;
+  width: 100%;
+  height: 50px;
+  border-radius: 5px;
+}
+
+.addAvatarInput {
+  border: none;
+  box-shadow: none;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  display: none;
+}
+
+.rightContainer,
+.leftContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  width: 100%;
+}
+
+.rightContainer {
+  gap: 100px;
+}
+
+.leftContainer {
+  justify-content: space-between;
+}
+
+.rightInputContainer,
+.leftInputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 960px) {
+  .modalContent {
+    width: 90%;
+    max-width: 100%;
+  }
+  .container {
+    gap: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .leftContainer {
+    gap: 20px;
+  }
+
+  .rightContainer {
+    gap: 20px;
+  }
+}

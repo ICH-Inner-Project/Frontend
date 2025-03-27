@@ -1,0 +1,47 @@
+.containerAccount,
+.containerList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  padding: 25px 50px;
+}
+
+.containerList {
+  align-items: center;
+  justify-content: center;
+}
+
+.admiAcessMessage {
+  text-align: center;
+}
+
+.linkContainerList,
+.linkContainerAccount {
+  display: flex;
+  align-items: center;
+  gap: 111px;
+}
+.linkContainerAccount {
+  padding-bottom: 146px;
+}
+
+.linkContainerList {
+  padding-bottom: 10px;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 38px;
+  max-width: 700px;
+  width: 100%;
+}
+
+@media (max-width: 420px) {
+  .containerAccount,
+  .containerList {
+    padding: 25px;
+  }
+}

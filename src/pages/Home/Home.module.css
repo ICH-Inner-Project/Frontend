@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  padding: 25px 50px;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  gap: 25px;
+}
+
+.postsSettingsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.showPostsSettingsContainer {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.orderContainer,
+.notMyPostsContainer,
+.toogleSwitch {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.loading {
+  text-align: center;
+}
+
+@media (max-width: 420px) {
+  .container {
+    padding: 25px;
+  }
+  .postsSettingsContainer {
+    gap: 10px;
+  }
+}

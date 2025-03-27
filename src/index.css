@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto";
+  box-sizing: border-box;
+}
+
+input,
+textarea,
+select {
+  border: 2.32px solid #d3d3d3;
+  background-color: white;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  color: #4f4f4f;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #4f4f4f;
+}
+
+input.bottom-border,
+textarea.bottom-border {
+  border-bottom: 3px solid #d3d3d3;
+}
