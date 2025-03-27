@@ -29,7 +29,7 @@ function ContactUs() {
       console.log(formData);
       const response = await usersService.sendEmail(
         formData.yourEmail,
-        "exmple@gmail.com", // прописать почту нашей техподдержки
+        "chatty.tech.info@gmail.com", // прописать почту нашей техподдержки
         `New message from ${formData.yourname}`,
         formData.content
       );
